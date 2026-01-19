@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+
+<head>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concerts & Festivals - Carte</title>
+</head>
+
+<body>
+    <div id="map"></div>
+    
+    <!-- Filter Button -->
+    <button id="filter-btn" class="filter-btn" onclick="toggleFilterDrawer()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Filtres</span>
+    </button>
+
+    <!-- Search and List Buttons -->
+    <button id="search-btn" class="map-action-btn" onclick="toggleMapSearch()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <button id="list-btn" class="map-action-btn" onclick="toggleEventList()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+
+    <!-- Search Input -->
+    <div id="map-search-container" class="map-search-container">
+        <input type="text" id="map-search-input" class="map-search-input" placeholder="Rechercher un événement ou lieu...">
+    </div>
+
+    <!-- Event Drawer -->
+    <div id="event-drawer" class="event-drawer">
+        <div id="drawer-content" class="drawer-content">
+            <!-- Content will be dynamically inserted -->
+        </div>
+    </div>
+
+    <!-- Filter Drawer -->
+    <div id="filter-drawer" class="filter-drawer">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h2 class="filter-title">Filtres</h2>
+                <button class="drawer-close" onclick="closeFilterDrawer()">×</button>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-section-title">Genre de musique</h3>
+                <div class="filter-options">
+                    <button class="filter-option">Rap / Hip-Hop</button>
+                    <button class="filter-option">Electro</button>
+                    <button class="filter-option">Afro</button>
+                    <button class="filter-option">R&B / Soul</button>
+                    <button class="filter-option">Métal</button>
+                    <button class="filter-option">Jazz</button>
+                    <button class="filter-option">Rock</button>
+                    <button class="filter-option">Pop</button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-section-title">Type d'événement</h3>
+                <div class="filter-options">
+                    <button class="filter-option">Concert</button>
+                    <button class="filter-option">Festival</button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-section-title">Date</h3>
+                <div class="filter-options">
+                    <button class="filter-option">Aujourd'hui</button>
+                    <button class="filter-option">Cette semaine</button>
+                    <button class="filter-option">Ce mois-ci</button>
+                    <button class="filter-option">Plus tard</button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-section-title">Distance</h3>
+                <div class="filter-options">
+                    <button class="filter-option"> 5 km</button>
+                    <button class="filter-option"> 10 km</button>
+                    <button class="filter-option"> 20 km</button>
+                    <button class="filter-option">Peu importe</button>
+                </div>
+            </div>
+
+            <button class="apply-filters-btn">Appliquer les filtres</button>
+        </div>
+    </div>
+
+    <!-- Event List Drawer -->
+    <div id="event-list-drawer" class="event-drawer">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h2 class="filter-title">Événements à venir</h2>
+                <button class="drawer-close" onclick="closeEventList()">×</button>
+            </div>
+            <div id="event-list-content" class="event-list-grid">
+                <!-- Content will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Panel -->
+    <div id="welcome-overlay" class="welcome-overlay">
+        <div class="welcome-panel">
+            <h2>BIENVENUE<br>SUR LA MAP</h2>
+            <p>Navigue sur la carte et retrouve des concerts et festivals susceptibles de t'intéresser</p>
+            <button class="welcome-btn" onclick="closeWelcomePanel()">J'ai compris</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="#" class="nav-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="index.html" class="nav-item active">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </nav>
+</body>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="./script.js"></script>
+
+</html>

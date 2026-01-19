@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail de l'événement</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!-- Back Button -->
+    <button class="back-btn" onclick="goBack()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <div class="event-detail-container">
+        <!-- Event Header with Image -->
+        <div class="event-header">
+            <div class="event-image" id="eventImage">
+                <!-- Image will be dynamically inserted -->
+            </div>
+        </div>
+
+        <!-- Artists List -->
+        <div class="artists-section" id="artistsSection">
+            <div class="artists-list">
+                <p>BIGFLO & OLI</p>
+                <p>GIMS, ORELSAN</p>
+                <p>IAO CASABLANCA • L28</p>
+                <p>LA MANO 1.9</p>
+                <p>BIANCA COSTA</p>
+                <p>MOSIMANN • NICO MORENO</p>
+                <p>ZARA LARSSON</p>
+            </div>
+        </div>
+
+        <!-- Genre Tags -->
+        <div class="genre-tags" id="genreTags">
+            <span class="genre-tag">Rap / Hip-Hop</span>
+            <span class="genre-tag">Techno</span>
+            <span class="genre-tag">Pop</span>
+        </div>
+
+        <!-- Event Info Section -->
+        <div class="event-info-section">
+            <div class="event-dates" id="eventDates">
+                <p class="date-text">28/06/2026 - 28/06/2026</p>
+            </div>
+
+            <div class="event-location" id="eventLocation">
+                <p class="location-name">Hippodrome de Paris-Longchamp</p>
+                <p class="location-address">2 Rue des Tribunes, 75016 Paris 🔗</p>
+            </div>
+        </div>
+
+        <!-- Description Section -->
+        <div class="description-section">
+            <h3 class="section-title-collapsible" onclick="toggleDescription()">
+                DESCRIPTION 
+                <span class="arrow" id="descriptionArrow">^</span>
+            </h3>
+            <div class="description-content" id="descriptionContent">
+                <p>Solidays est un festival de musique engagé qui se tient chaque année à l'Hippodrome de Paris-Longchamp. Cet événement rassemble les plus grands artistes de la scène musicale française et internationale pour trois jours de concerts exceptionnels.</p>
+                <p>Tous les bénéfices du festival sont reversés à des associations de lutte contre le VIH/SIDA, faisant de Solidays bien plus qu'un simple festival : c'est un événement solidaire qui allie musique et engagement social.</p>
+            </div>
+        </div>
+
+        <!-- Participation Button -->
+        <div class="participation-section">
+            <button class="participate-btn">
+                Participer à cet événement
+                <span class="badge">groupe</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Random event images
+        function getRandomEventImage() {
+            const images = [
+                'https://adamconcerts.com/wp-content/uploads/2025/10/Theodora_2026_web_META_1080x1440_SoldOut_Marseille.jpg',
+                'https://files.offi.fr/programmation/3020022/images/1000/e31acdb8ecb31d76416f990de9f59a01.png',
+                'https://www.parisladefense-arena.com/uploads/2025/05/visu-date-2-819x1024.jpg'
+            ];
+            return images[Math.floor(Math.random() * images.length)];
+        }
+
+        // Get event data from URL parameters
+        function getEventFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventData = urlParams.get('event');
+            
+            if (eventData) {
+                try {
+                    return JSON.parse(decodeURIComponent(eventData));
+                } catch (e) {
+                    console.error('Error parsing event data:', e);
+                    return null;
+                }
+            }
+            
+            // Return demo data if no URL params
+            return {
+                title_fr: "SOLIDAYS",
+                daterange_fr: "28/06/2026 - 28/06/2026",
+                location_name: "Hippodrome de Paris-Longchamp",
+                location_address: "2 Rue des Tribunes, 75016 Paris",
+                artists: ["BIGFLO & OLI", "GIMS, ORELSAN", "IAO CASABLANCA • L28", "LA MANO 1.9", "BIANCA COSTA", "MOSIMANN • NICO MORENO", "ZARA LARSSON"],
+                genres: ["Rap / Hip-Hop", "Techno", "Pop"],
+                description_fr: "Solidays est un festival de musique engagé qui se tient chaque année à l'Hippodrome de Paris-Longchamp. Cet événement rassemble les plus grands artistes de la scène musicale française et internationale pour trois jours de concerts exceptionnels."
+            };
+        }
+
+        // Populate event details
+        function populateEventDetails() {
+            const event = getEventFromURL();
+            
+            if (event) {
+                // Random image for header
+                const eventImage = document.getElementById('eventImage');
+                const randomImage = getRandomEventImage();
+                eventImage.style.backgroundImage = `url('${randomImage}')`;
+                eventImage.style.backgroundSize = 'cover';
+                eventImage.style.backgroundPosition = 'center';
+                
+                // Dates
+                if (event.daterange_fr) {
+                    document.getElementById('eventDates').innerHTML = `<p class="date-text">${event.daterange_fr}</p>`;
+                }
+                
+                // Location
+                if (event.location_name || event.location_address) {
+                    let locationHTML = '';
+                    if (event.location_name) {
+                        locationHTML += `<p class="location-name">${event.location_name}</p>`;
+                    }
+                    if (event.location_address) {
+                        locationHTML += `<p class="location-address">${event.location_address} 🔗</p>`;
+                    }
+                    document.getElementById('eventLocation').innerHTML = locationHTML;
+                }
+                
+                // Artists
+                if (event.artists && event.artists.length > 0) {
+                    const artistsHTML = event.artists.map(artist => `<p>${artist}</p>`).join('');
+                    document.getElementById('artistsSection').innerHTML = `<div class="artists-list">${artistsHTML}</div>`;
+                } else {
+                    document.getElementById('artistsSection').style.display = 'none';
+                }
+                
+                // Genres
+                if (event.genres && event.genres.length > 0) {
+                    const genresHTML = event.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('');
+                    document.getElementById('genreTags').innerHTML = genresHTML;
+                } else {
+                    document.getElementById('genreTags').style.display = 'none';
+                }
+                
+                // Description
+                if (event.description_fr || event.longdescription_fr) {
+                    const description = event.longdescription_fr || event.description_fr || '';
+                    if (description) {
+                        document.getElementById('descriptionContent').innerHTML = `<p>${description}</p>`;
+                    }
+                } else {
+                    // Si pas de description disponible, afficher un message par défaut
+                    document.getElementById('descriptionContent').innerHTML = `<p>Aucune description disponible pour cet événement.</p>`;
+                }
+            }
+        }
+
+        function toggleDescription() {
+            const content = document.getElementById('descriptionContent');
+            const arrow = document.getElementById('descriptionArrow');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateEventDetails();
+        });
+    </script>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="#" class="nav-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="index.html" class="nav-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </nav>
+</body>
+
+</html>

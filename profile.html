@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!-- Back Button -->
+    <button class="back-btn" onclick="goBack()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <div class="profile-container">
+        <!-- Image Carousel -->
+        <div class="profile-carousel">
+            <div class="carousel-container" id="carouselContainer">
+                <div class="carousel-track">
+                    <div class="carousel-card" data-index="0">
+                        <img src="images/Profil_carrousel1.jpg" alt="Photo de profil 1">
+                    </div>
+                    <div class="carousel-card" data-index="1">
+                        <img src="images/Profil_carrousel2.jpg" alt="Photo de profil 2">
+                    </div>
+                    <div class="carousel-card" data-index="2">
+                        <img src="images/Profil_carrousel3.jpg" alt="Photo de profil 3">
+                    </div>
+                    <div class="carousel-card" data-index="3">
+                        <img src="images/Profil_carrousel4.jpg" alt="Photo de profil 4">
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-indicators" id="carouselIndicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
+                <span class="indicator" data-index="2"></span>
+                <span class="indicator" data-index="3"></span>
+            </div>
+        </div>
+
+        <!-- Music Genres -->
+        <div class="genre-badges" id="genreBadges">
+            <span class="genre-badge">R&B / Soul</span>
+            <span class="genre-badge">Electro</span>
+        </div>
+
+        <!-- Name and Age -->
+        <div class="profile-header">
+            <h1 class="profile-name" id="profileName">MARIANNA</h1>
+            <span class="profile-age" id="profileAge">21</span>
+            <button class="edit-btn">✏️</button>
+        </div>
+
+        <!-- Personal Description -->
+        <div class="profile-description" id="profileDescription">
+            <p>Je cherche souvent quelqu'un pour m'accompagner en festival, t'es dispo ?</p>
+        </div>
+
+        <!-- Favorite Artists Section -->
+        <div class="section-container">
+            <h2 class="section-title">ARTISTES PRÉFÉRÉS</h2>
+            <div class="artist-badges" id="artistBadges">
+                <span class="artist-badge">J.Cole</span>
+                <span class="artist-badge">Disclosure</span>
+                <span class="artist-badge">Summer Walker</span>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div class="section-container">
+            <h2 class="section-title">EVENTS</h2>
+            <div class="events-grid" id="eventsGrid">
+                <div class="event-card" style="background-image: url('https://bullesdeculture.com/bdc-content/uploads/2025/06/affiche-solidays-2025.jpg');">
+                    <p class="event-name">Solidays 2025</p>
+                </div>
+                <div class="event-card" style="background-image: url('https://cdn.sortiraparis.com/images/80/98469/762097-we-love-green-2022-nos-photos.jpg');">
+                    <p class="event-name">We Love Green</p>
+                </div>
+                <div class="event-card" style="background-image: url('https://www.gaite-lyrique.net/storage/2022/06/30/gaite-1920x1080-titre_cover.png');">
+                    <p class="event-name">Pitchfork</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Video Section -->
+        <div class="section-container">
+            <h2 class="section-title">VIDÉO LIVE</h2>
+            <div class="video-container" id="videoContainer">
+                <video class="video-player" controls>
+                    <source src="images/Vid_Live.mov" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de vidéos.
+                </video>
+            </div>
+        </div>
+
+        <!-- Top Albums Section -->
+        <div class="section-container">
+            <h2 class="section-title">MES TOPS ALBUM 🎤</h2>
+            <div class="albums-grid" id="albumsGrid">
+                <div class="album-card">
+                    <div class="album-cover" style="background-image: url('https://static.fnac-static.com/multimedia/Images/FR/NR/98/c9/bc/12372376/1520-1/tsp20200611152131/Energy.jpg'); background-size: cover; background-position: center;">
+                    </div>
+                    <p class="album-name">Energy</p>
+                    <p class="album-artist">Disclosure</p>
+                </div>
+                <div class="album-card">
+                    <div class="album-cover" style="background-image: url('https://cdn-images.dzcdn.net/images/cover/30a28794bfa49a7e1bd56e402d13fcec/0x1900-000000-80-0-0.jpg'); background-size: cover; background-position: center;">
+                    </div>
+                    <p class="album-name">Still Over It</p>
+                    <p class="album-artist">Summer W.</p>
+                </div>
+                <div class="album-card">
+                    <div class="album-cover" style="background-image: url('https://static.fnac-static.com/multimedia/Images/FR/NR/71/b0/e5/15052913/1520-1/tsp20230118101623/Jungle.jpg'); background-size: cover; background-position: center;">
+                    </div>
+                    <p class="album-name">Jungle</p>
+                    <p class="album-artist">The Blaze</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get user profile data (from localStorage or API)
+        function getUserProfile() {
+            // Check if user preferences exist
+            const preferences = localStorage.getItem('userPreferences');
+            
+            if (preferences) {
+                try {
+                    const data = JSON.parse(preferences);
+                    return {
+                        name: "MARIANNA", // Could be from user account
+                        age: 21,
+                        genres: data.genres || ["R&B / Soul", "Electro"],
+                        artists: data.artists || ["J.Cole", "Disclosure", "Summer Walker"],
+                        description: "Je cherche souvent quelqu'un pour m'accompagner en festival, t'es dispo ?"
+                    };
+                } catch (e) {
+                    console.error('Error parsing user preferences:', e);
+                }
+            }
+            
+            // Return demo data
+            return {
+                name: "MARIANNA",
+                age: 21,
+                genres: ["R&B / Soul", "Electro"],
+                artists: ["J.Cole", "Disclosure", "Summer Walker"],
+                description: "Je cherche souvent quelqu'un pour m'accompagner en festival, t'es dispo ?"
+            };
+        }
+
+        // Populate profile data
+        function populateProfile() {
+            const profile = getUserProfile();
+            
+            // Name and age
+            document.getElementById('profileName').textContent = profile.name.toUpperCase();
+            document.getElementById('profileAge').textContent = profile.age;
+            
+            // Genres
+            if (profile.genres && profile.genres.length > 0) {
+                const genresHTML = profile.genres.map(genre => 
+                    `<span class="genre-badge">${genre}</span>`
+                ).join('');
+                document.getElementById('genreBadges').innerHTML = genresHTML;
+            }
+            
+            // Artists
+            if (profile.artists && profile.artists.length > 0) {
+                const artistsHTML = profile.artists.map(artist => 
+                    `<span class="artist-badge">${artist}</span>`
+                ).join('');
+                document.getElementById('artistBadges').innerHTML = artistsHTML;
+            }
+            
+            // Description
+            if (profile.description) {
+                document.getElementById('profileDescription').innerHTML = `<p>${profile.description}</p>`;
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const carouselCards = document.querySelectorAll('.carousel-card');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = carouselCards.length;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function updateCarousel() {
+            carouselCards.forEach((card, i) => {
+                card.classList.remove('active', 'prev', 'next');
+                card.style.transform = '';
+                card.style.opacity = '0';
+                card.style.zIndex = '0';
+                card.style.pointerEvents = 'none';
+            });
+
+            // Calculate indices with looping
+            const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            const nextIndex = (currentSlide + 1) % totalSlides;
+
+            // Set classes and styles for visible cards
+            carouselCards[prevIndex].classList.add('prev');
+            carouselCards[prevIndex].style.opacity = '0.6';
+            carouselCards[prevIndex].style.zIndex = '1';
+
+            carouselCards[currentSlide].classList.add('active');
+            carouselCards[currentSlide].style.opacity = '1';
+            carouselCards[currentSlide].style.zIndex = '10';
+
+            carouselCards[nextIndex].classList.add('next');
+            carouselCards[nextIndex].style.opacity = '0.6';
+            carouselCards[nextIndex].style.zIndex = '1';
+
+            // Update indicators
+            indicators.forEach((indicator, i) => {
+                if (i === currentSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        function showSlide(index) {
+            // Handle loop: wrap around
+            if (index >= totalSlides) {
+                currentSlide = 0;
+            } else if (index < 0) {
+                currentSlide = totalSlides - 1;
+            } else {
+                currentSlide = index;
+            }
+
+            updateCarousel();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Touch/Swipe support for mobile
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe left
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                // Swipe right
+                prevSlide();
+            }
+        }
+
+        // Initialize profile
+        document.addEventListener('DOMContentLoaded', function() {
+            populateProfile();
+            updateCarousel(); // Initialize carousel positions
+
+            // Setup carousel controls
+            const carouselContainer = document.getElementById('carouselContainer');
+            
+            // Touch events for swipe
+            carouselContainer.addEventListener('touchstart', handleTouchStart, false);
+            carouselContainer.addEventListener('touchend', handleTouchEnd, false);
+
+            // Click on indicators
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                }
+            });
+
+            // Optional: Auto-advance carousel every 5 seconds
+            // Uncomment the lines below if you want auto-play
+            // setInterval(() => {
+            //     nextSlide();
+            // }, 5000);
+        });
+    </script>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="#" class="nav-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="index.html" class="nav-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </nav>
+</body>
+
+</html>
