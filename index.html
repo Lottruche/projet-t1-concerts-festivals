@@ -2,149 +2,395 @@
 <html lang="fr-FR">
 
 <head>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concerts & Festivals - Carte</title>
+    <title>Onboarding - Préférences Musicales</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-    <div id="map"></div>
-    
-    <!-- Filter Button -->
-    <button id="filter-btn" class="filter-btn" onclick="toggleFilterDrawer()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span>Filtres</span>
-    </button>
+    <div class="onboarding-container">
+        <!-- Step 1: Music Genres -->
+        <div class="step active" id="step1">
+            <h2>Quels genres de musique préfères-tu ?</h2>
 
-    <!-- Search and List Buttons -->
-    <button id="search-btn" class="map-action-btn" onclick="toggleMapSearch()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-    </button>
-    <button id="list-btn" class="map-action-btn" onclick="toggleEventList()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-    </button>
+            <div class="search-container">
+                <button class="search-icon-only" id="genreSearchToggle" onclick="toggleGenreSearch()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <input type="text" class="search-input" id="genreSearch" placeholder="Rechercher un genre...">
+            </div>
 
-    <!-- Search Input -->
-    <div id="map-search-container" class="map-search-container">
-        <input type="text" id="map-search-input" class="map-search-input" placeholder="Rechercher un événement ou lieu...">
-    </div>
-
-    <!-- Event Drawer -->
-    <div id="event-drawer" class="event-drawer">
-        <div id="drawer-content" class="drawer-content">
-            <!-- Content will be dynamically inserted -->
+            <div class="genre-list" id="genreList">
+            </div>
         </div>
-    </div>
 
-    <!-- Filter Drawer -->
-    <div id="filter-drawer" class="filter-drawer">
-        <div class="drawer-content">
-            <div class="drawer-header">
-                <h2 class="filter-title">Filtres</h2>
-                <button class="drawer-close" onclick="closeFilterDrawer()">×</button>
+        <!-- Step 2: Favorite Artists -->
+        <div class="step" id="step2">
+            <h2>Quels sont tes artistes préférés ?</h2>
+
+            <div class="search-container">
+                <button class="search-icon-only" id="searchToggle" onclick="toggleSearch()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <input type="text" class="search-input" id="artistSearch" placeholder="Rechercher un artiste...">
             </div>
 
-            <div class="filter-section">
-                <h3 class="filter-section-title">Genre de musique</h3>
-                <div class="filter-options">
-                    <button class="filter-option">Rap / Hip-Hop</button>
-                    <button class="filter-option">Electro</button>
-                    <button class="filter-option">Afro</button>
-                    <button class="filter-option">R&B / Soul</button>
-                    <button class="filter-option">Métal</button>
-                    <button class="filter-option">Jazz</button>
-                    <button class="filter-option">Rock</button>
-                    <button class="filter-option">Pop</button>
-                </div>
+            <div class="artist-list" id="artistList">
             </div>
-
-            <div class="filter-section">
-                <h3 class="filter-section-title">Type d'événement</h3>
-                <div class="filter-options">
-                    <button class="filter-option">Concert</button>
-                    <button class="filter-option">Festival</button>
-                </div>
-            </div>
-
-            <div class="filter-section">
-                <h3 class="filter-section-title">Date</h3>
-                <div class="filter-options">
-                    <button class="filter-option">Aujourd'hui</button>
-                    <button class="filter-option">Cette semaine</button>
-                    <button class="filter-option">Ce mois-ci</button>
-                    <button class="filter-option">Plus tard</button>
-                </div>
-            </div>
-
-            <div class="filter-section">
-                <h3 class="filter-section-title">Distance</h3>
-                <div class="filter-options">
-                    <button class="filter-option"> 5 km</button>
-                    <button class="filter-option"> 10 km</button>
-                    <button class="filter-option"> 20 km</button>
-                    <button class="filter-option">Peu importe</button>
-                </div>
-            </div>
-
-            <button class="apply-filters-btn">Appliquer les filtres</button>
         </div>
-    </div>
 
-    <!-- Event List Drawer -->
-    <div id="event-list-drawer" class="event-drawer">
-        <div class="drawer-content">
-            <div class="drawer-header">
-                <h2 class="filter-title">Événements à venir</h2>
-                <button class="drawer-close" onclick="closeEventList()">×</button>
+        <!-- Step 3: People Type -->
+        <div class="step" id="step3">
+            <h2>Quelles personnes cherches-tu ?</h2>
+
+            <div class="section-title">Tranche d'âge</div>
+            <div class="people-options" id="ageOptions">
+                <div class="people-card" onclick="toggleOption(this, 'age', '18-25')">
+                    <div class="people-title">18 - 25 ans</div>
+                </div>
+                <div class="people-card" onclick="toggleOption(this, 'age', '25-35')">
+                    <div class="people-title">25 - 35 ans</div>
+                </div>
+                <div class="people-card" onclick="toggleOption(this, 'age', '35-45')">
+                    <div class="people-title">35 - 45 ans</div>
+                </div>
+                <div class="people-card" onclick="toggleOption(this, 'age', '45+')">
+                    <div class="people-title">45 et +</div>
+                </div>
+                <div class="people-card" onclick="toggleOption(this, 'age', 'any')">
+                    <div class="people-title">Peu importe</div>
+                </div>
             </div>
-            <div id="event-list-content" class="event-list-grid">
-                <!-- Content will be dynamically inserted -->
+
+            <div class="section-title">Genre</div>
+            <div class="people-options" id="genderOptions">
+                <div class="people-card" onclick="toggleOption(this, 'gender', 'women')">
+                    <div class="people-title">Femmes</div>
+                </div>
+                <div class="people-card" onclick="toggleOption(this, 'gender', 'men')">
+                    <div class="people-title">Hommes</div>
+                </div>
+                <div class="people-card" onclick="toggleOption(this, 'gender', 'any')">
+                    <div class="people-title">Peu importe</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Welcome Panel -->
-    <div id="welcome-overlay" class="welcome-overlay">
-        <div class="welcome-panel">
-            <h2>BIENVENUE<br>SUR LA MAP</h2>
-            <p>Navigue sur la carte et retrouve des concerts et festivals susceptibles de t'intéresser</p>
-            <button class="welcome-btn" onclick="closeWelcomePanel()">J'ai compris</button>
-        </div>
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn" onclick="previousStep()">«</button>
+        <a href="#" class="skip-link" id="skipLink" onclick="skipStep(); return false;">Passer</a>
+        <button class="nav-btn" id="nextBtn" onclick="nextStep()">»</button>
     </div>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav" id="bottomNav">
-        <a href="#" class="nav-item">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
-        <a href="index.html" class="nav-item active">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
-        <a href="profile.html" class="nav-item">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
-    </nav>
+    <button class="finish-btn" id="finishBtn" onclick="finishOnboarding()" style="display: none;">C'est parti !</button>
+
+    <div class="progress-dots">
+        <div class="progress-dot active" data-step="1"></div>
+        <div class="progress-dot" data-step="2"></div>
+        <div class="progress-dot" data-step="3"></div>
+    </div>
+
+    <script>
+        // Data storage
+        let currentStep = 1;
+        const totalSteps = 3;
+        let selectedGenres = [];
+        let selectedArtists = [];
+        let selectedAge = [];
+        let selectedGender = [];
+
+        // Sample data
+        const genres = [
+            'Rap / Hip-Hop', 'Electro', 'Afro', 'R&B / Soul', 'Métal',
+            'Jazz', 'House', 'Chanson Française', 'Rock', 'Pop',
+            'Techno', 'Reggae / Dub', 'Latino', 'K-pop', 'Blues', 'Classique'
+        ];
+
+        const artists = [
+            'The Weeknd', 'Beyoncé', 'Théodora', 'Damso', 'Sabrina Carpenter',
+            'Jul', 'Giveon', 'Stray Kids', 'Billie Eilish', 'Taylor Swift',
+            'Drake', 'Rosalía', 'SDM', 'Lady Gaga', 'Imagine Dragons',
+            'Kendji Girac', 'Kendrick Lamar', 'Stromae', 'Angèle', 'Orelsan'
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+            updateProgressDots();
+            initializeGenreList();
+            initializeArtistList();
+            setupSearchListeners();
+        });
+
+        function updateProgressDots() {
+            document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+                if (index + 1 === currentStep) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const finishBtn = document.getElementById('finishBtn');
+            const skipLink = document.getElementById('skipLink');
+
+            prevBtn.disabled = currentStep === 1;
+            
+            if (currentStep === 3) {
+                nextBtn.style.display = 'none';
+                finishBtn.style.display = 'block';
+                skipLink.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'flex';
+                finishBtn.style.display = 'none';
+                skipLink.style.display = 'block';
+            }
+        }
+
+        function initializeGenreList() {
+            const container = document.getElementById('genreList');
+            container.innerHTML = genres.map(genre => 
+                `<div class="artist-item" onclick="toggleGenre(this, '${genre}')">${genre}</div>`
+            ).join('');
+        }
+
+        function initializeArtistList() {
+            const container = document.getElementById('artistList');
+            container.innerHTML = artists.map(artist => 
+                `<div class="artist-item" onclick="toggleArtist(this, '${artist}')">${artist}</div>`
+            ).join('');
+        }
+
+        function toggleGenre(element, genre) {
+            element.classList.toggle('selected');
+            
+            if (element.classList.contains('selected')) {
+                if (!selectedGenres.includes(genre)) {
+                    selectedGenres.push(genre);
+                }
+            } else {
+                selectedGenres = selectedGenres.filter(g => g !== genre);
+            }
+        }
+
+        function toggleArtist(element, artist) {
+            element.classList.toggle('selected');
+            
+            if (element.classList.contains('selected')) {
+                if (!selectedArtists.includes(artist)) {
+                    selectedArtists.push(artist);
+                }
+            } else {
+                selectedArtists = selectedArtists.filter(a => a !== artist);
+            }
+        }
+
+        function toggleOption(element, type, value) {
+            // Remove 'Peu importe' if another option is selected
+            const container = element.parentElement;
+            const anyOption = Array.from(container.children).find(child => 
+                child.querySelector('.people-title').textContent === 'Peu importe'
+            );
+
+            if (element !== anyOption && element.classList.contains('selected') === false) {
+                if (anyOption) {
+                    anyOption.classList.remove('selected');
+                    if (type === 'age') {
+                        selectedAge = selectedAge.filter(v => v !== 'any');
+                    } else {
+                        selectedGender = selectedGender.filter(v => v !== 'any');
+                    }
+                }
+            }
+
+            // If selecting 'Peu importe', deselect all others
+            if (element === anyOption) {
+                Array.from(container.children).forEach(child => {
+                    if (child !== anyOption) {
+                        child.classList.remove('selected');
+                    }
+                });
+                if (type === 'age') {
+                    selectedAge = ['any'];
+                } else {
+                    selectedGender = ['any'];
+                }
+            }
+
+            element.classList.toggle('selected');
+            
+            if (element.classList.contains('selected')) {
+                if (type === 'age' && !selectedAge.includes(value)) {
+                    selectedAge.push(value);
+                } else if (type === 'gender' && !selectedGender.includes(value)) {
+                    selectedGender.push(value);
+                }
+            } else {
+                if (type === 'age') {
+                    selectedAge = selectedAge.filter(v => v !== value);
+                } else {
+                    selectedGender = selectedGender.filter(v => v !== value);
+                }
+            }
+        }
+
+        function toggleGenreSearch() {
+            const searchInput = document.getElementById('genreSearch');
+            const searchToggle = document.getElementById('genreSearchToggle');
+            
+            if (searchInput.classList.contains('visible')) {
+                searchInput.classList.remove('visible');
+                searchToggle.classList.remove('hidden');
+            } else {
+                searchInput.classList.add('visible');
+                searchToggle.classList.add('hidden');
+                searchInput.focus();
+            }
+        }
+
+        function toggleSearch() {
+            const searchInput = document.getElementById('artistSearch');
+            const searchToggle = document.getElementById('searchToggle');
+            
+            if (searchInput.classList.contains('visible')) {
+                searchInput.classList.remove('visible');
+                searchToggle.classList.remove('hidden');
+            } else {
+                searchInput.classList.add('visible');
+                searchToggle.classList.add('hidden');
+                searchInput.focus();
+            }
+        }
+
+        function setupSearchListeners() {
+            // Genre search
+            const genreSearch = document.getElementById('genreSearch');
+            genreSearch.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const genreItems = document.querySelectorAll('#genreList .artist-item');
+                
+                genreItems.forEach(item => {
+                    const genreName = item.textContent.toLowerCase();
+                    if (genreName.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+
+            genreSearch.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                    const newGenre = e.target.value.trim();
+                    const genreList = document.getElementById('genreList');
+                    const newItem = document.createElement('div');
+                    newItem.className = 'artist-item selected';
+                    newItem.textContent = newGenre;
+                    newItem.onclick = function() { toggleGenre(this, newGenre); };
+                    genreList.insertBefore(newItem, genreList.firstChild);
+                    selectedGenres.push(newGenre);
+                    e.target.value = '';
+                    
+                    // Reset filter
+                    document.querySelectorAll('#genreList .artist-item').forEach(item => {
+                        item.style.display = 'block';
+                    });
+                }
+            });
+
+            // Artist search
+            const artistSearch = document.getElementById('artistSearch');
+            artistSearch.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const artistItems = document.querySelectorAll('.artist-item');
+                
+                artistItems.forEach(item => {
+                    const artistName = item.textContent.toLowerCase();
+                    if (artistName.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+
+            artistSearch.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                    const newArtist = e.target.value.trim();
+                    const artistList = document.getElementById('artistList');
+                    const newItem = document.createElement('div');
+                    newItem.className = 'artist-item selected';
+                    newItem.textContent = newArtist;
+                    newItem.onclick = function() { toggleArtist(this, newArtist); };
+                    artistList.insertBefore(newItem, artistList.firstChild);
+                    selectedArtists.push(newArtist);
+                    e.target.value = '';
+                    
+                    // Reset filter
+                    document.querySelectorAll('.artist-item').forEach(item => {
+                        item.style.display = 'block';
+                    });
+                }
+            });
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateNavigation();
+                updateProgressDots();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateNavigation();
+                updateProgressDots();
+            }
+        }
+
+        function skipStep() {
+            nextStep();
+        }
+
+        function finishOnboarding() {
+            const preferences = {
+                genres: selectedGenres,
+                artists: selectedArtists,
+                age: selectedAge,
+                gender: selectedGender
+            };
+            
+            console.log('Préférences utilisateur:', preferences);
+            
+            // Store preferences
+            localStorage.setItem('userPreferences', JSON.stringify(preferences));
+            
+            // Marquer que l'utilisateur vient de terminer l'onboarding
+            localStorage.setItem('fromOnboarding', 'true');
+            
+            // Redirect to main page
+            window.location.href = 'carte.html';
+        }
+    </script>
 </body>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="./script.js"></script>
 
 </html>
